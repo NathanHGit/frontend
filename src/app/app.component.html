@@ -1,0 +1,38 @@
+<div id="grid">
+  <app-searchbar
+    id="searchbar"
+    (sendUrlEvent)="setUrl($event)"
+    (addToBookmarkEvent)="setToBookmark()"
+    [bookmarks]="bookmarks"
+    [video]="currentVideo"
+  ></app-searchbar>
+  <app-video-view id="video-view" [video]="currentVideo"></app-video-view>
+  <div id="left-side">
+    <div id="nav">
+      <h3
+        [ngClass]="{ active: isHistoryDisplayed }"
+        (click)="changeDisplay($event)"
+      >
+        History
+      </h3>
+      <h3
+        [ngClass]="{ active: !isHistoryDisplayed }"
+        (click)="changeDisplay($event)"
+      >
+        Bookmarks ({{ bookmarks.length }})
+      </h3>
+    </div>
+    <app-history
+      id="history"
+      *ngIf="isHistoryDisplayed"
+      [history]="history"
+      (sendUrlEvent)="loadVideo($event)"
+    ></app-history>
+    <app-bookmarks
+      id="bookmarks"
+      *ngIf="!isHistoryDisplayed"
+      [bookmarks]="bookmarks"
+      (sendUrlEvent)="loadVideo($event)"
+    ></app-bookmarks>
+  </div>
+</div>

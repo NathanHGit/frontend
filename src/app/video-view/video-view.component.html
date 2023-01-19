@@ -1,0 +1,6 @@
+<div id="video-player">
+  <iframe [src]="this.safeUrl" *ngIf="video.length"> </iframe>
+  <div id="empty-box" *ngIf="!video.length">
+    <p>Invalid URL</p>
+  </div>
+</div>
