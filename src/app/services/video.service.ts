@@ -1,31 +1,35 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject, catchError, Observable, of, Subject } from 'rxjs';
+import { HostListener, Injectable } from '@angular/core';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
 })
 export class VideoService {
-  constructor(private http: HttpClient) {
-    this.init();
-  }
-
   private currentVideo = new Subject<string>();
   private lastVideo: string = '';
-  public offline = false;
 
   private bookmarks$ = new BehaviorSubject<string[]>([]);
   private history$ = new BehaviorSubject<string[]>([]);
 
+  constructor(private http: HttpClient) {
+    this.init();
+  }
+
+  @HostListener('window:beforeunload')
+  doSomething() {
+    if (!navigator.onLine) return;
+    this.saveBookmarks();
+    this.saveHistory();
+  }
+
   async init() {
-    this.http
-      .get<string[]>('http://localhost:8000/connection')
-      .pipe(catchError((error) => of(error)))
-      .subscribe((data) => {
-        if (data.status == 0) this.offline = true;
-        this.loadBookmarks();
-        this.loadHistory();
-      });
+    window.ononline = (e) => {
+      this.saveBookmarks();
+      this.saveHistory();
+    };
+    this.loadBookmarks();
+    this.loadHistory();
   }
 
   setCurrentVideo(url: string) {
@@ -39,16 +43,11 @@ export class VideoService {
   }
 
   loadHistory() {
-    if (this.offline) {
-      const history = JSON.parse(localStorage.getItem('history')!);
-      if (history) this.history$.next(history);
-    } else {
-      this.http
-        .get<string[]>('http://localhost:8000/history')
-        .subscribe((data) => {
-          this.history$.next(data);
-        });
-    }
+    this.http
+      .get<string[]>('http://localhost:8000/history')
+      .subscribe((data) => {
+        this.history$.next(data);
+      });
   }
 
   getHistory(): Observable<string[]> {
@@ -71,16 +70,11 @@ export class VideoService {
   }
 
   loadBookmarks() {
-    if (this.offline) {
-      const bookmarks = JSON.parse(localStorage.getItem('bookmarks')!);
-      if (bookmarks) this.bookmarks$.next(bookmarks);
-    } else {
-      this.http
-        .get<string[]>('http://localhost:8000/bookmarks')
-        .subscribe((data) => {
-          this.bookmarks$.next(data);
-        });
-    }
+    this.http
+      .get<string[]>('http://localhost:8000/bookmarks')
+      .subscribe((data) => {
+        this.bookmarks$.next(data);
+      });
   }
 
   getBookmarks(): Observable<string[]> {

@@ -1,5 +1,5 @@
 <div id="grid">
-  <app-searchbar id="searchbar"></app-searchbar>
+  <app-searchbar id="searchbar" [bookmarks]="bookmarks"></app-searchbar>
   <app-video-view id="video-view"></app-video-view>
   <div id="left-side">
     <div id="nav">
@@ -11,6 +11,6 @@
       </h3>
     </div>
     <app-history id="history" *ngIf="isHistoryDisplayed"></app-history>
-    <app-bookmarks id="bookmarks" *ngIf="!isHistoryDisplayed"></app-bookmarks>
+    <app-bookmarks id="bookmarks" *ngIf="!isHistoryDisplayed" [bookmarks]="bookmarks"></app-bookmarks>
   </div>
 </div>

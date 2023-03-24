@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { VideoService } from '../video.service';
+import { Component, Input } from '@angular/core';
+import { VideoService } from '../services/video.service';
 
 @Component({
   selector: 'app-bookmarks',
@@ -7,21 +7,11 @@ import { VideoService } from '../video.service';
   styleUrls: ['./bookmarks.component.css'],
 })
 export class BookmarksComponent {
-  bookmarks: String[] = [];
+  @Input() bookmarks: String[] = [];
 
   constructor(private videoService: VideoService) {}
 
-  ngOnInit(): void {
-    this.getBookmarks();
-  }
-
   loadVideo(url: any) {
     this.videoService.setCurrentVideo(url);
-  }
-
-  getBookmarks(): void {
-    this.videoService
-      .getBookmarks()
-      .subscribe((bookmarks) => (this.bookmarks = bookmarks));
   }
 }

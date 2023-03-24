@@ -1,6 +1,6 @@
-import { Component, HostListener } from '@angular/core';
-import { UrlService } from '../url.service';
-import { VideoService } from '../video.service';
+import { Component, Input } from '@angular/core';
+import { UrlService } from '../services/url.service';
+import { VideoService } from '../services/video.service';
 
 @Component({
   selector: 'app-searchbar',
@@ -8,7 +8,7 @@ import { VideoService } from '../video.service';
   styleUrls: ['./searchbar.component.css'],
 })
 export class SearchbarComponent {
-  bookmarks: string[] = [];
+  @Input() bookmarks: String[] = [];
   currentVideo: string = '';
 
   constructor(
@@ -17,14 +17,7 @@ export class SearchbarComponent {
   ) {}
 
   ngOnInit(): void {
-    this.getBookmarks();
     this.getCurrentVideo();
-  }
-
-  getBookmarks(): void {
-    this.videoService
-      .getBookmarks()
-      .subscribe((bookmarks) => (this.bookmarks = bookmarks));
   }
 
   getCurrentVideo(): void {
@@ -46,12 +39,5 @@ export class SearchbarComponent {
     this.bookmarks.includes(this.currentVideo)
       ? this.videoService.removeFromBookmarks(this.currentVideo)
       : this.videoService.addToBookmarks(this.currentVideo);
-  }
-
-  @HostListener('window:beforeunload')
-  doSomething() {
-    if (!this.videoService.offline) return;
-    this.videoService.saveBookmarks();
-    this.videoService.saveHistory();
   }
 }

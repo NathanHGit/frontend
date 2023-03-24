@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
-import { VideoService } from '../video.service';
+import { VideoService } from '../services/video.service';
 
 @Component({
   selector: 'app-video-view',
