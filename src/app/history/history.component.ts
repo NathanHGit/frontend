@@ -1,4 +1,5 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component } from '@angular/core';
+import { VideoService } from '../video.service';
 
 @Component({
   selector: 'app-history',
@@ -6,10 +7,21 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
   styleUrls: ['./history.component.css'],
 })
 export class HistoryComponent {
-  @Input() history!: string[];
-  @Output() sendUrlEvent = new EventEmitter<string>();
+  history: String[] = [];
+
+  constructor(private videoService: VideoService) {}
+
+  ngOnInit(): void {
+    this.getHistory();
+  }
+
+  getHistory(): void {
+    this.videoService
+      .getHistory()
+      .subscribe((history) => (this.history = history));
+  }
 
   loadVideo(url: any) {
-    this.sendUrlEvent.emit(url);
+    this.videoService.setCurrentVideo(url);
   }
 }

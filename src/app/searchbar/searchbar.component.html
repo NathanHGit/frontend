@@ -2,11 +2,14 @@
 <label for="video_url">Please enter an URL</label>
 <div id="searchbar-actions">
   <div id="searchbar-input">
-    <input type="text" name="video_url" id="video_url" #video_url />
-    <button (click)="sendUrl(video_url)">Send</button>
+    <form action="" onsubmit='return false'>
+      <input type="text" name="video_url" id="video_url" #video_url />
+      <button (click)="sendUrl(video_url)">Send</button>
+    </form>
   </div>
 
-  <button (click)="saveVideo()" [disabled]="!video.length">
-    {{ !bookmarks.includes(video) ? "Save to" : "Remove from" }} bookmarks
+  <button (click)="saveVideo()" [disabled]="!this.currentVideo.length">
+    {{ !bookmarks.includes(this.currentVideo) ? "Save to" : "Remove from" }} bookmarks
   </button>
+
 </div>

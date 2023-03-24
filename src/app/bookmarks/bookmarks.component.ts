@@ -1,4 +1,5 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component } from '@angular/core';
+import { VideoService } from '../video.service';
 
 @Component({
   selector: 'app-bookmarks',
@@ -6,10 +7,21 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
   styleUrls: ['./bookmarks.component.css'],
 })
 export class BookmarksComponent {
-  @Input() bookmarks!: string[];
-  @Output() sendUrlEvent = new EventEmitter<string>();
+  bookmarks: String[] = [];
+
+  constructor(private videoService: VideoService) {}
+
+  ngOnInit(): void {
+    this.getBookmarks();
+  }
 
   loadVideo(url: any) {
-    this.sendUrlEvent.emit(url);
+    this.videoService.setCurrentVideo(url);
+  }
+
+  getBookmarks(): void {
+    this.videoService
+      .getBookmarks()
+      .subscribe((bookmarks) => (this.bookmarks = bookmarks));
   }
 }
