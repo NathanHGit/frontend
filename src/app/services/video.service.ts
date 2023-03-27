@@ -1,4 +1,4 @@
-import { HostListener, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 
@@ -14,13 +14,6 @@ export class VideoService {
 
   constructor(private http: HttpClient) {
     this.init();
-  }
-
-  @HostListener('window:beforeunload')
-  doSomething() {
-    if (!navigator.onLine) return;
-    this.saveBookmarks();
-    this.saveHistory();
   }
 
   async init() {

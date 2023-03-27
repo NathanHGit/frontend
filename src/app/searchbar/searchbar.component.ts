@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, HostListener, Input } from '@angular/core';
 import { UrlService } from '../services/url.service';
 import { VideoService } from '../services/video.service';
 
@@ -39,5 +39,12 @@ export class SearchbarComponent {
     this.bookmarks.includes(this.currentVideo)
       ? this.videoService.removeFromBookmarks(this.currentVideo)
       : this.videoService.addToBookmarks(this.currentVideo);
+  }
+
+  @HostListener('window:beforeunload')
+  doSomething() {
+    if (!navigator.onLine) return;
+    this.videoService.saveBookmarks();
+    this.videoService.saveHistory();
   }
 }
